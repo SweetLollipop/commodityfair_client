@@ -31,5 +31,10 @@ export default new VueRouter({
             path: "/search",
             component: Search,
         },
+        //重定向
+        {
+            path: "*",
+            redirect: "/home",
+        },
     ]
 })
