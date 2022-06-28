@@ -31,10 +31,21 @@ export default new VueRouter({
             meta: {show: false}
         },
         {
-            path: "/search/:keyword",
+            path: "/search/:keyword?",
             component: Search,
             meta: {show: true},
             name: "search",
+            //面试题4:路由组件能不能传递props数据?可以
+            //布尔值写法:params
+            // props:true,
+            //对象写法：{}
+            // props: {a:1, b:2}
+            //函数写法：可以把params参数、query参数，通过props传递给路由组件
+            props: ($route) => {
+                return {
+                    keyword: $route.params.keyword, k: $route.query.k
+                };
+            }
         },
         //重定向
         {
