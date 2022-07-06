@@ -8,7 +8,9 @@ Vue.component(TypeNav.name, TypeNav);
 import router from '@/router';
 
 Vue.config.productionTip = false
-
+//测试
+import {reqCategoryList} from '@/api';
+reqCategoryList();
 new Vue({
   render: h => h(App),
   //注册路由：底下的写法KV一致省略V【router首字母小写】
