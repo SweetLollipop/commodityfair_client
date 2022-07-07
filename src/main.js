@@ -6,6 +6,8 @@ import TypeNav from '@/pages/Home/TypeNav';
 Vue.component(TypeNav.name, TypeNav);
 //引入路由
 import router from '@/router';
+//引入仓库
+import store from '@/store';
 
 Vue.config.productionTip = false
 //测试
@@ -15,5 +17,7 @@ new Vue({
   render: h => h(App),
   //注册路由：底下的写法KV一致省略V【router首字母小写】
   //注册路由信息：当这里书写router的时候，组件身上都拥有$route,$router属性
-  router
+  router,
+  //注册仓库：组件实例的身上会多一个属性$store属性
+  store,
 }).$mount('#app')
