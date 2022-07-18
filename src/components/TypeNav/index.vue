@@ -61,7 +61,13 @@
 </template>
 
 <script>
+
 import { mapState } from "vuex";
+//引入方式：是把lodash全部功能函数引入
+// import _ from 'lodash';
+//按需引入：把lodash中的throttle引入；因为throttle.js中是默认暴露，所以不加{}
+import throttle from "lodash/throttle";
+
 export default {
   name: "TypeNav",
   data() {
@@ -84,14 +90,19 @@ export default {
   },
   methods: {
     //鼠标进入修改响应式数据currentIndex
-    changeIndex(index) {
+    /* changeIndex(index) {
       //index:鼠标移上某一个一级分类的元素的索引值
       //正常情况（用户慢慢的操作）：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
       //非正常情况（用户操作很快）：本身全部的一级分类抖音该触发鼠标进入事件，但是经过测试，只有部分h3触发了
       //就是由于用户行为过快，导致浏览器反应不过来，如果当前回调函数中有一些大量业务，有可能出现卡顿现象。
       this.currentIndex = index;
       console.log('鼠标进入'+index);
-    },
+    }, */
+    //throttle回调函数别用箭头函数，可能出现上下文this
+    changeIndex: throttle(function(index){
+      this.currentIndex = index;
+      console.log('鼠标进入'+index);
+    },50),
     //一级分类鼠标移出的事件回调
     leaveIndex() {
       //鼠标移出currentIndex, 变为-1
