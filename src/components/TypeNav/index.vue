@@ -7,6 +7,7 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
+          <!-- 利用事件委派+编程式导航实现路由的跳转与传递参数 -->
           <div class="all-sort-list2" @click="goSearch">
             <div
               class="item"
@@ -15,7 +16,7 @@
               :class="{ cur: currentIndex === index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a>{{ c1.categoryName }}</a>
+                <a :data-categoryName="c1.categoryName" :date-category1Id="c1.category1Id">{{ c1.categoryName }}</a>
               </h3>
               <!-- 二级、三级分类 -->
               <div
@@ -29,14 +30,14 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a>{{ c2.categoryName }}</a>
+                      <a :data-categoryName="c2.categoryName" :date-category2Id="c2.category2Id">{{ c2.categoryName }}</a>
                     </dt>
                     <dd>
                       <em
                         v-for="(c3, index) in c2.categoryChild"
                         :key="c3.categoryId"
                       >
-                        <a>{{ c3.categoryName }}</a>
+                        <a :data-categoryName="c3.categoryName" :date-category3Id="c3.category3Id">{{ c3.categoryName }}</a>
                       </em>
                     </dd>
                   </dl>
@@ -101,7 +102,7 @@ export default {
     //throttle回调函数别用箭头函数，可能出现上下文this
     changeIndex: throttle(function(index){
       this.currentIndex = index;
-      console.log('鼠标进入'+index);
+      // console.log('鼠标进入'+index);
     },50),
     //一级分类鼠标移出的事件回调
     leaveIndex() {
@@ -109,10 +110,33 @@ export default {
       this.currentIndex = -1;
     },
     //进行路由跳转的方法
-    goSearch(){
+    goSearch(event){
       //最好的解决方案：编程式导航+事件委派
       //利用事件委派存在一问题：1：怎么知道点击的哪个a标签委派给父节点 2：如何获取参数【1、2、3级分类的名字、id】
-      this.$router.push('/search');
+      //解决：1：把子节点当中a标签，我加上自定义属性data-categoryName，其余的子节点是没有的
+
+      let element = event.target;
+      //获取当前触发这个事件的节点【h3、a、dt、dl】，需要带有data-categoryname这样节点【一定是a标签】
+      //节点有一个属性dataset属性，可以获取节点的自定义属性与属性值
+      let {categoryname,category1id,category2id,category3id} = element.dataset;
+      //如果标签身上拥有categoryname一定是a标签
+      if(categoryname){
+        //整理路由跳转的参数
+        let location = {name:'search'};
+        let query = {categoryName:categoryname}
+        //解决：2：区分点击的是1、2、3级分类a标签，添加自定义属性data-category123id,
+        if(category1id){
+          query.category1Id = category1id;
+        }else if(category2id){
+          query.category2Id = category2id;
+        }else{
+          query.category3Id = category3id;
+        }
+        //整理完参数
+        location.query = query;
+        //路由跳转
+        this.$router.push(location);
+      }
     }
   },
 };
