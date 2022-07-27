@@ -17,6 +17,12 @@ export default {
     Header,
     Footer,
   },
+  mounted(){
+    //派发一个action||获取商品分类的三级列表的数据（从TypeNav.vue中复制粘贴过来，因为app.vue只执行一次）
+    //注意不能下面的语句不能放到main.js中，因为main.js中的this为undefined;
+    //通知vuex发请求，获取数，存储于仓库当中
+    this.$store.dispatch("categoryList");
+  }
 };
 </script>
 

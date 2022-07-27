@@ -96,8 +96,8 @@ export default {
   },
   //组件挂载完毕：可以向服务器发请求
   mounted() {
-    //通知vuex发请求，获取数，存储于仓库当中
-    this.$store.dispatch("categoryList");
+    //通知vuex发请求，获取数，存储于仓库当中（优化：放到App.vue中，请求只执行一次即可）
+    // this.$store.dispatch("categoryList");
     //当组件挂载完毕，让show变为false
     //如果不是Home路由组件，将TypeNav进行隐藏
     if (this.$route.path !== "/home") {
