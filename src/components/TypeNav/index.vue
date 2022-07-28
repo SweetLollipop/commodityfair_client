@@ -20,7 +20,7 @@
                 <h3 @mouseenter="changeIndex(index)">
                   <a
                     :data-categoryName="c1.categoryName"
-                    :date-category1Id="c1.category1Id"
+                    :data-category1Id="c1.categoryId"
                     >{{ c1.categoryName }}</a
                   >
                 </h3>
@@ -40,7 +40,7 @@
                       <dt>
                         <a
                           :data-categoryName="c2.categoryName"
-                          :date-category2Id="c2.category2Id"
+                          :data-category2Id="c2.categoryId"
                           >{{ c2.categoryName }}</a
                         >
                       </dt>
@@ -51,7 +51,7 @@
                         >
                           <a
                             :data-categoryName="c3.categoryName"
-                            :date-category3Id="c3.category3Id"
+                            :data-category3Id="c3.categoryId"
                             >{{ c3.categoryName }}</a
                           >
                         </em>
@@ -159,6 +159,8 @@ export default {
         } else {
           query.category3Id = category3id;
         }
+        //如果路由跳转的时候，带有params参数，捎带上传递过去
+        location.params = this.$route.params || undefined;
         //整理完参数
         location.query = query;
         //路由跳转

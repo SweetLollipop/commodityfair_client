@@ -57,8 +57,8 @@ export default {
   name: "Header",
   data() {
     return {
-      keyword: '',
-    }
+      keyword: "",
+    };
   },
   methods: {
     goSearch() {
@@ -86,9 +86,11 @@ export default {
 
       //面试题4:路由组件能不能传递props数据?
       //可以的：三种写法
-      this.$router.push({name:"search",params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}});
-
-
+      this.$router.push({
+        name: "search",
+        params: { keyword: this.keyword || undefined },
+        query: this.$route.query || undefined,
+      });
     },
   },
 };
