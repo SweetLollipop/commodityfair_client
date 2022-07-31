@@ -5,8 +5,12 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="(carousel, index) in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
             <!--  <div class="swiper-slide">
               <img src="./images/banner2.jpg" />
@@ -101,15 +105,42 @@
 
 <script>
 import { mapState } from "vuex";
+//引包
+import Swiper from "swiper";
 export default {
   name: "ListContainer",
   mounted() {
     //派发action：通过Vuex发起ajax请求，将数据存储在仓库中
     this.$store.dispatch("getBannerList");
+    //在 new Swiper实例之前，页面中结构必须得有，【现在把new swiper实例放在mounted这里发现不行】
+    //为什么？因为dispatch当中涉及异步语句，导致v-for遍历的时候结构还不完整
+    setTimeout(() => {
+      var mySwiper = new Swiper(".swiper-container", {
+        // direction: 'vertical', // 垂直切换选项
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true, //点击小球的时候也切换轮播图
+        },
+
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        // 如果需要滚动条
+        /* scrollbar: {
+            el: '.swiper-scrollbar',
+        }, */
+      });
+    }, 300);
   },
   computed: {
     ...mapState({
-      bannerList: state => state.home.bannerList
+      bannerList: (state) => state.home.bannerList,
     }),
   },
 };
