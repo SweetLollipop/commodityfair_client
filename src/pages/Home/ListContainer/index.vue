@@ -114,34 +114,70 @@ export default {
     this.$store.dispatch("getBannerList");
     //在 new Swiper实例之前，页面中结构必须得有，【现在把new swiper实例放在mounted这里发现不行】
     //为什么？因为dispatch当中涉及异步语句，导致v-for遍历的时候结构还不完整
-    setTimeout(() => {
-      var mySwiper = new Swiper(".swiper-container", {
-        // direction: 'vertical', // 垂直切换选项
-        loop: true, // 循环模式选项
+    // setTimeout(() => {
+    //   var mySwiper = new Swiper(".swiper-container", {
+    //     // direction: 'vertical', // 垂直切换选项
+    //     loop: true, // 循环模式选项
 
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true, //点击小球的时候也切换轮播图
-        },
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       clickable: true, //点击小球的时候也切换轮播图
+    //     },
 
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
 
-        // 如果需要滚动条
-        /* scrollbar: {
-            el: '.swiper-scrollbar',
-        }, */
-      });
-    }, 300);
+    //     // 如果需要滚动条
+    //     /* scrollbar: {
+    //         el: '.swiper-scrollbar',
+    //     }, */
+    //   });
+    // }, 300);
   },
   computed: {
     ...mapState({
       bannerList: (state) => state.home.bannerList,
     }),
+  },
+  watch: {
+    //监听bannerList数据的变化：因为这条数据发生过变化----由空数组变为数组里面有四个元素
+    bannerList: {
+      handler(newValue, oldValue) {
+        //现在通过watch监听bannerList属性的属性值的变化
+        //如果执行handler方法，代表组件实例身上这个属性的属性已经有了【数组：四个元素】
+        //当前这个函数执行：只能保证bannerList数据已经有了，但是你没办法保证v-for已经执行结束了
+        //v-for执行完毕，才有结构【你现在在watch当中没办法保证的】
+        //nextTick:在下次 DOM 更新 循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
+        this.$nextTick(() => {
+          //当你执行这个回调的时候：保证服务器数据回来了，v-for执行完毕了【一定轮播图的结构一定有了】
+          var mySwiper = new Swiper(".swiper-container", {
+            // direction: 'vertical', // 垂直切换选项
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true, //点击小球的时候也切换轮播图
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+
+            // 如果需要滚动条
+            /* scrollbar: {
+            el: '.swiper-scrollbar',
+        }, */
+          });
+        });
+      },
+    },
   },
 };
 </script>
