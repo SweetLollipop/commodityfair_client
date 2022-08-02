@@ -3,7 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" ref="mySwiper">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -154,7 +154,10 @@ export default {
         //nextTick:在下次 DOM 更新 循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
         this.$nextTick(() => {
           //当你执行这个回调的时候：保证服务器数据回来了，v-for执行完毕了【一定轮播图的结构一定有了】
-          var mySwiper = new Swiper(".swiper-container", {
+          var mySwiper = new Swiper(
+            // ".swiper-container", 
+            this.$refs.mySwiper,
+            {
             // direction: 'vertical', // 垂直切换选项
             loop: true, // 循环模式选项
 

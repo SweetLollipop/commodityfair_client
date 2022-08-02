@@ -95,6 +95,7 @@
 <script>
 export default {
   name: "Floor",
+  props: ["list"],
 };
 </script>
 
