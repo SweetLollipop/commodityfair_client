@@ -335,6 +335,10 @@
 
     components: {
       SearchSelector
+    },
+    mounted(){
+      //先测试接口返回数据格式
+      this.$store.dispatch('getSearchList');
     }
   }
 </script>
