@@ -20,8 +20,23 @@ const actions = {
         }
     }
 };
-//计算属性，在项目当中，为了简化仓库中的数据而生
-const getters = {};
+//计算属性，getters主要的作用是：简化仓库中的数据
+//getters可以把我们将来在组件当中需要用的数据简化一下【将来组件在获取数据的时候就方便了】
+const getters = {
+    //当前形参state,当前仓库中的state(即searchList),并非大仓库中的哪个state
+    goodsList(state) {
+        //state.searchList.goodsList如果服务器数据回来了，没有问题是一个数组
+        //假如网络很慢或没网state.searchList.goodsList应该返回的是undefined
+        //计算新的属性的的属性值至少赋予一个空数组
+        return state.searchList.goodsList || [];
+    },
+    trademarkList(state) {
+        return state.searchList.trademarkList;
+    },
+    attrsList(state) {
+        return state.searchList.attrsList;
+    }
+};
 export default {
     state,
     mutations,
