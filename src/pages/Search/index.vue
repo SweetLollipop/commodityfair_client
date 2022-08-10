@@ -116,17 +116,51 @@
   import {mapGetters} from 'vuex';
   export default {
     name: 'Search',
-
+    data() {
+      return {
+        //带给服务器参数
+        searchParams: {
+          "category1Id": "", //一级分类id
+          "category2Id": "",  //二级级分类id
+          "category3Id": "",   //三级级分类id
+          "categoryName": "",   //商品名称
+          "keyword": "",        //关键字
+          "order": "",          //排序
+          "pageNo": 1,          //当前页码
+          "pageSize": 10,       //每页几条数据
+          "props": [""],        //平台售卖属性操作带的参数
+          "trademark": ""       //品牌
+        }
+      }
+    },
     components: {
       SearchSelector
     },
+    //当组件挂载完毕之前执行一次
+    beforeMount() {
+      //复杂的写法
+      /* this.searchParams.category1Id = this.$route.query.category1Id;
+      this.searchParams.category2Id = this.$route.query.category2Id;
+      this.searchParams.category3Id = this.$route.query.category3Id;
+      this.searchParams.category1Id = this.$route.query.category1Id;
+      this.searchParams.categoryName = this.$route.query.categoryName;
+      this.searchParams.keyword = this.$route.params.keyword; */
+      //Object.assign:Es6新增的语法，合并对象
+      Object.assign(this.searchParams, this.$route.query, this.$route.params)
+    },
     mounted(){
-      //先测试接口返回数据格式
-      this.$store.dispatch('getSearchList');
+      this.getData();
     },
     computed:{
       //mapGetters里面的写法：传递的数组，因为gettes计算是没有划分模块【home,search】
       ...mapGetters(['goodsList'])
+    },
+    methods: {
+      //向服务器发请求获取search模块数据（根据参数不同返回不同的数据进行展示）
+      //把这次请求封装为一个函数：当你需要在调用的时候调用即可
+      getData() {
+      this.$store.dispatch('getSearchList',this.searchParams);
+      }
     }
   }
 </script>
