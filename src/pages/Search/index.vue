@@ -138,6 +138,7 @@
     },
     //当组件挂载完毕之前执行一次
     beforeMount() {
+      //在发请求之前，把接口需要传递参数，进行整理（再给服务器发请求之前，把参数整理好，服务器就会返回查询的数据）
       //复杂的写法
       /* this.searchParams.category1Id = this.$route.query.category1Id;
       this.searchParams.category2Id = this.$route.query.category2Id;
@@ -160,6 +161,20 @@
       //把这次请求封装为一个函数：当你需要在调用的时候调用即可
       getData() {
       this.$store.dispatch('getSearchList',this.searchParams);
+      }
+    },
+    //数据监听，监听组件实例身上的属性的属性值变化
+    watch: {
+      //监听路由的信息是否发生变化，如果发生变化，再次发起请求
+      $route(newVal,oldVal){
+        //再次发请求之前整理带给服务器参数
+        Object.assign(this.searchParams, this.$route.query, this.$route.params)
+        //再次发起ajax请求
+        this.getData();
+        //每一次请求完毕，应该吧相应的1、2、3级分类id置空，让他接收下一次的相应1、2、3id
+        this.searchParams.category1Id = "";
+        this.searchParams.category2Id = "";
+        this.searchParams.category3Id = "";
       }
     }
   }
