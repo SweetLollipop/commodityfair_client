@@ -11,10 +11,7 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
           </ul>
         </div>
 
@@ -161,6 +158,20 @@
       //把这次请求封装为一个函数：当你需要在调用的时候调用即可
       getData() {
       this.$store.dispatch('getSearchList',this.searchParams);
+      },
+      //删除分类的名字
+      removeCategoryName(){
+        //把带给服务器的参数置空了，还需要向服务器发请求
+        //带给服务器参数说明可有可无的：如果属性值为空的字符串还是会把相应的字段带给服务器
+        //但是你把相应的字段变为undefined，当前这个字段不会带给服务器
+        this.searchParams.categoryName = undefined;
+        this.searchParams.category1Id = undefined;
+        this.searchParams.category2Id = undefined;
+        this.searchParams.category3Id = undefined;
+        this.getData();
+        //地址栏也需要修改：进行路由的跳转(现在的路由跳转知识跳转到自己这里)
+        //严谨：本意是删除query，如果路径当中出现params不应该删除，路由跳转的时候应该带上
+        this.$router.push({name:"search", params: this.$route.params});
       }
     },
     //数据监听，监听组件实例身上的属性的属性值变化
@@ -172,9 +183,9 @@
         //再次发起ajax请求
         this.getData();
         //每一次请求完毕，应该吧相应的1、2、3级分类id置空，让他接收下一次的相应1、2、3id
-        this.searchParams.category1Id = "";
-        this.searchParams.category2Id = "";
-        this.searchParams.category3Id = "";
+        this.searchParams.category1Id = undefined;
+        this.searchParams.category2Id = undefined;
+        this.searchParams.category3Id = undefined;
       }
     }
   }
