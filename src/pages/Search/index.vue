@@ -11,7 +11,10 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 分类的面包屑 -->
             <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
+            <!-- 关键字的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removekeyword">×</i></li>
           </ul>
         </div>
 
@@ -172,6 +175,17 @@
         //地址栏也需要修改：进行路由的跳转(现在的路由跳转知识跳转到自己这里)
         //严谨：本意是删除query，如果路径当中出现params不应该删除，路由跳转的时候应该带上
         this.$router.push({name:"search", params: this.$route.params});
+      },
+      //删除关键字
+      removekeyword() {
+        //给服务器带的参数searchParams的keyword置空
+        this.searchParams.keyword = undefined;
+        //再次发请求
+        this.getData();
+        //通知兄弟组件Heather清除关键字
+        this.$bus.$emit('clear');
+        //路径自己跳转自己，清除路径中的params参数
+        this.$router.push({name:"search", query: this.$route.query});
       }
     },
     //数据监听，监听组件实例身上的属性的属性值变化
