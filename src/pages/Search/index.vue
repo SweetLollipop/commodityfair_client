@@ -14,12 +14,14 @@
             <!-- 分类的面包屑 -->
             <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
             <!-- 关键字的面包屑 -->
-            <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removekeyword">×</i></li>
+            <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">×</i></li>
+            <!-- 品牌信息的面包屑 -->
+            <li class="with-x" v-if="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="removeTrademark">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -177,7 +179,7 @@
         this.$router.push({name:"search", params: this.$route.params});
       },
       //删除关键字
-      removekeyword() {
+      removeKeyword() {
         //给服务器带的参数searchParams的keyword置空
         this.searchParams.keyword = undefined;
         //再次发请求
@@ -186,6 +188,19 @@
         this.$bus.$emit('clear');
         //路径自己跳转自己，清除路径中的params参数
         this.$router.push({name:"search", query: this.$route.query});
+      },
+      //自定义事件
+      trademarkInfo(trademark) {
+        //整理品牌字段的参数 "ID:品牌名称"
+        this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+        this.getData();
+      },
+      //删除品牌信息
+      removeTrademark() {
+        //将品牌信息置空
+        this.searchParams.trademark = undefined;
+        //在发请求
+        this.getData();
       }
     },
     //数据监听，监听组件实例身上的属性的属性值变化
