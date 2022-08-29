@@ -12,11 +12,12 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
+    <!-- 平台售卖属性 -->
     <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attrId">
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue,index) in attr.attrValueList" :key="index">
+          <li v-for="(attrValue,index) in attr.attrValueList" :key="index" @click="attrInfo(attr,attrValue)">
             <a>{{attrValue}}</a>
           </li>
         </ul>
@@ -40,6 +41,10 @@ export default {
       //让父组件发请求：因为父组件中国的searchParams参数是带给服务器的参数
       //此子组件把当前点击的品牌信息，传递给父组件---自定义事件
       this.$emit('trademarkInfo',trademark);
+    },
+    //平台售卖属性值的点击事件
+    attrInfo(attr, attrValue) {
+      this.$emit("attrInfo", attr, attrValue);
     }
   }
 };

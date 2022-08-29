@@ -17,11 +17,13 @@
             <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">×</i></li>
             <!-- 品牌信息的面包屑 -->
             <li class="with-x" v-if="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="removeTrademark">×</i></li>
+            <!-- 平台的售卖属性值的面包屑 -->
+            <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index">{{attrValue.split(":")[1]}}<i @click="removeAttr(index)">×</i></li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo"/>
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -130,7 +132,7 @@
           "order": "",          //排序
           "pageNo": 1,          //当前页码
           "pageSize": 10,       //每页几条数据
-          "props": [""],        //平台售卖属性操作带的参数
+          "props": [],        //平台售卖属性操作带的参数
           "trademark": ""       //品牌
         }
       }
@@ -200,6 +202,24 @@
         //将品牌信息置空
         this.searchParams.trademark = undefined;
         //在发请求
+        this.getData();
+      },
+      //收集平台属性地方回调函数（自定义事件）
+      attrInfo(attr, attrValue) {
+        //["属性ID:属性值:属性名"]
+        let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+        //数组去重后，再push
+        if(this.searchParams.props.indexOf(props)===-1){
+          this.searchParams.props.push(props);
+        }
+        //再次发请求
+        this.getData();
+      },
+      //删除售卖属性
+      removeAttr(index) {
+        //再次整理参数
+        this.searchParams.props.splice(index,1);
+        //再次发请求
         this.getData();
       }
     },
