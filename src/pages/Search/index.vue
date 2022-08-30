@@ -30,23 +30,11 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active : isOne}">
+                  <a>综合<span v-show="isOne && isAsc">⬆</span><span v-show="isOne && isDesc">⬇</span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active : isTwo}">
+                  <a>价格<span v-show="isTwo && isAsc">⬆</span><span v-show="isTwo && isDesc">⬇</span></a>
                 </li>
               </ul>
             </div>
@@ -129,7 +117,7 @@
           "category3Id": "",   //三级级分类id
           "categoryName": "",   //商品名称
           "keyword": "",        //关键字
-          "order": "",          //排序
+          "order": "1:desc",          //排序：初始值是:"综合：降序"
           "pageNo": 1,          //当前页码
           "pageSize": 10,       //每页几条数据
           "props": [],        //平台售卖属性操作带的参数
@@ -158,7 +146,20 @@
     },
     computed:{
       //mapGetters里面的写法：传递的数组，因为gettes计算是没有划分模块【home,search】
-      ...mapGetters(['goodsList'])
+      ...mapGetters(['goodsList']),
+      //返回一个布尔值：true|false
+      isOne() {
+        return this.searchParams.order.indexOf('1') !== -1;
+      },
+      isTwo() {
+        return this.searchParams.order.indexOf('2') !== -1;
+      },
+      isAsc() {
+        return this.searchParams.order.indexOf('asc') !== -1;
+      },
+      isDesc() {
+        return this.searchParams.order.indexOf('desc') !== -1;
+      }
     },
     methods: {
       //向服务器发请求获取search模块数据（根据参数不同返回不同的数据进行展示）
