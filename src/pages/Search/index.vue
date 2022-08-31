@@ -30,10 +30,10 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{active : isOne}">
+                <li :class="{active : isOne}" @click="changeOrder('1')">
                   <a>综合<span v-show="isOne && isAsc">⬆</span><span v-show="isOne && isDesc">⬇</span></a>
                 </li>
-                <li :class="{active : isTwo}">
+                <li :class="{active : isTwo}" @click="changeOrder('2')">
                   <a>价格<span v-show="isTwo && isAsc">⬆</span><span v-show="isTwo && isDesc">⬇</span></a>
                 </li>
               </ul>
@@ -222,6 +222,22 @@
         this.searchParams.props.splice(index,1);
         //再次发请求
         this.getData();
+      },
+      //改变排序,flag形参：1代表综合，2代表价格
+      changeOrder(flag) {
+        //获取初始状态
+        let originFlag = this.searchParams.order.split(':')[0];
+        let originSort = this.searchParams.order.split(':')[1];
+        //判断点击的：是否已标红
+        if(flag === originFlag){
+          //若点击是标红，originFlag不变，originSort取反
+          let newOrder = `${originFlag}:${originSort==="desc"?"asc":"desc"}`;
+          this.searchParams.order = newOrder;
+        }else{
+          //若点击非标红，orginFlag取反，originSort不变
+          this.searchParams.order = `${originFlag==="1"?"2":"1"}:${originSort}`;
+        }
+        this.getData(); //再发请求
       }
     },
     //数据监听，监听组件实例身上的属性的属性值变化
