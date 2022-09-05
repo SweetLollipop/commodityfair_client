@@ -68,7 +68,7 @@
             </ul>
           </div>
           <!-- 分页器:测试分页器阶段，这里数据将来需要替换的 -->
-          <Pagination :pageNo="27" :pageSize="3" :total="91" :continues="5"></Pagination>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"></Pagination>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
 
 <script>
   import SearchSelector from './SearchSelector/SearchSelector'
-  import {mapGetters} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
   export default {
     name: 'Search',
     data() {
@@ -91,7 +91,7 @@
           "categoryName": "",   //商品名称
           "keyword": "",        //关键字
           "order": "1:desc",          //排序：初始值是:"综合：降序"
-          "pageNo": 1,          //当前页码
+          "pageNo": 8,          //当前页码
           "pageSize": 10,       //每页几条数据
           "props": [],        //平台售卖属性操作带的参数
           "trademark": ""       //品牌
@@ -120,6 +120,10 @@
     computed:{
       //mapGetters里面的写法：传递的数组，因为gettes计算是没有划分模块【home,search】
       ...mapGetters(['goodsList']),
+      // 获取search模块展示产品一共多少数据
+      ...mapState({
+        total: state => state.search.searchList.total
+      }),
       //返回一个布尔值：true|false
       isOne() {
         return this.searchParams.order.indexOf('1') !== -1;
@@ -211,6 +215,13 @@
           this.searchParams.order = `${originFlag==="1"?"2":"1"}:${originSort}`;
         }
         this.getData(); //再发请求
+      },
+      //获取当前第几页--自定义事件
+      getPageNo(pageNo) {
+        //整理带给服务器参数
+        this.searchParams.pageNo = pageNo;
+        //再次发请求
+        this.getData();
       }
     },
     //数据监听，监听组件实例身上的属性的属性值变化
