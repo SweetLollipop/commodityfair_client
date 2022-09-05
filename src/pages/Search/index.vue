@@ -91,7 +91,7 @@
           "categoryName": "",   //商品名称
           "keyword": "",        //关键字
           "order": "1:desc",          //排序：初始值是:"综合：降序"
-          "pageNo": 8,          //当前页码
+          "pageNo": 1,          //当前页码，默认是第一页
           "pageSize": 10,       //每页几条数据
           "props": [],        //平台售卖属性操作带的参数
           "trademark": ""       //品牌
