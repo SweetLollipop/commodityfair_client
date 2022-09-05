@@ -1,18 +1,17 @@
 <template>
   <div class="pagination">
+    <!-- 上 -->
     <button>上一页</button>
-    <button>1</button>
+    <button v-if="startNumAndEndNum.start>1">1</button>
 
-    <button>···</button>
+    <button v-if="startNumAndEndNum.start>2">···</button>
 
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
-
-    <button>···</button>
-    <button>{{totalPage}}</button>
+    <!-- 中间部分 -->
+    <button v-for="(page,index) in startNumAndEndNum.end" :key="index" v-if="page>=startNumAndEndNum.start">{{page}}</button>
+    
+    <!-- 下 -->
+    <button v-if="startNumAndEndNum.end<totalPage-1">···</button>
+    <button v-if="startNumAndEndNum.end<totalPage">{{totalPage}}</button>
     <button>下一页</button>
 
     <button style="margin-left: 30px">共 {{total}} 条</button>
@@ -38,7 +37,7 @@ export default {
       //连续页码数字5【就是至少五页】，如果出现不正常的现象【就是不够五页】
       if(continues > totalPage) {
         start = 1; end = totalPage;
-      }else {
+      }else {  //总页数大于五页
         start = pageNo - parseInt(continues/2); end = pageNo + parseInt(continues/2);
         //把出现不正常的现象【start<1】纠正
         if(start < 1) {
@@ -50,6 +49,8 @@ export default {
           start = totalPage - continues +1;
         }
       }
+      //同时返回两条数据，只能以对象的方式返回。
+      return {start,end};
     }
   }
 };
