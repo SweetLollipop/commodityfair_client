@@ -30,3 +30,6 @@ export const reqFloorList = () => mockRequests.get('/floor');
     "trademark": "4:小米"
   } */
 export const reqGetSearchInfo = (params) => requests({ url: '/list', method: 'post', data: params }) 
+
+//获取产品详情信息的接口
+export const reqGetGoodsInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' });
