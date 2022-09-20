@@ -16,7 +16,16 @@ const actions = {
         }
     }
 };
-const getters = {};
+//简化数据
+const getters = {
+    categoryView(state) {
+        //为了防止网速慢返回undefined报错，后面加个空对象{}
+        return state.goodsInfo.categoryView || {};
+    },
+    skuInfo(state) {
+        return state.goodsInfo.skuInfo || {};
+    }
+};
 
 export default {
     state,
