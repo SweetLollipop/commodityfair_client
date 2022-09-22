@@ -15,8 +15,8 @@
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
-          <!--放大镜效果-->
-          <Zoom />
+          <!--放大镜效果 父给子组件传值props 为了防止服务器数据还没返回报错，加上空数组-->
+          <Zoom :skuImgList="skuInfo.skuImageList || []"/>
           <!-- 小图列表 -->
           <ImageList />
         </div>
