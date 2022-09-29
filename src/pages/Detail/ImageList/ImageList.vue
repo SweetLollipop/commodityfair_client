@@ -2,7 +2,7 @@
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="(slide,index) in skuImgList" :key="index">
-        <img :src="slide.imgUrl">
+        <img :src="slide.imgUrl" :class="{active: currentIndex == index}" @click="changeCurrentIndex(index)"/>
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -14,7 +14,54 @@
   import Swiper from 'swiper'
   export default {
     name: "ImageList",
+    data() {
+      return {
+        currentIndex: 0,
+      }
+    },
     props: ['skuImgList'],
+    methods: {
+      changeCurrentIndex (index) {
+        //修改响应式数据
+        this.currentIndex = index;
+        //通知兄弟组件Zoom,当前的索引值
+        this.$bus.$emit('getIndex', this.currentIndex);
+      }
+    },
+    watch: {
+      //监听数据：可以保证数据一定是OK，但是不能保证v-for遍历结构是否完事
+      skuImgList: {
+        handler(newValue, oldValue) {
+          this.$nextTick( () => {
+            new Swiper ('.swiper-container', {
+              // direction: 'vertical', // 垂直切换选项,默认水平
+              // loop: true, // 循环模式选项
+              
+              // 如果需要分页器
+              /* pagination: {
+                el: '.swiper-pagination',
+              }, */
+              
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              },
+              
+              // 如果需要滚动条
+              /* scrollbar: {
+                el: '.swiper-scrollbar',
+              }, */
+
+              //显示几个图片
+              slidesPerView: 3,
+              //每次切换图片的个数
+              slidesPerGroup: 1,
+            })        
+          })
+        }
+      }
+    }
   }
 </script>
 
@@ -43,10 +90,10 @@
           padding: 1px;
         }
 
-        &:hover {
+        /* &:hover {
           border: 2px solid #f60;
           padding: 1px;
-        }
+        } */
       }
     }
 

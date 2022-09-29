@@ -12,12 +12,23 @@
 <script>
 export default {
   name: "Zoom",
+  data() {
+    return{
+      i: 0,
+    }
+  },
   props: ["skuImgList"],
   computed: {
     //为了防止服务器返回数据缓慢undefined,加上空对象
     imgObj() {
-      return this.skuImgList[0] || {};
+      return this.skuImgList[this.i] || {};
     }
+  },
+  mounted() {
+    //全局事件总线，获取兄弟组件传递过来的索引值
+    this.$bus.$on('getIndex',(index)=> {
+      this.i = index;
+    })
   }
 };
 </script>
