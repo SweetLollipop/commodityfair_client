@@ -25,6 +25,13 @@ const actions = {
         /* if(result.code === 200) {
             commit('ADDORUPDATESHOPCART', result.data);
         } */
+        if(result.code === 200) {
+            //加入购物车：成功
+            return 'ok';
+        }else {
+            //加入购物车：失败
+            return Promise.reject(new Error('faile'));
+        }
     }
 };
 //简化数据

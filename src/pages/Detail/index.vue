@@ -373,11 +373,18 @@
         this.skuNum = event.target.value;
       },
       //加入购物车的回调函数
-      addShopCart(){
+      async addShopCart(){
         //1:发请求--讲产品加入到数据库（通知服务器）
-        this.$store.dispatch('AddOrUpdateShopCart',{skuId: this.$route.params.skuId, skuNum: this.skuNum})
+        try {
+          let result = await this.$store.dispatch('AddOrUpdateShopCart',{skuId: null, skuNum: this.skuNum})
         //2:服务器存储成功-----进行路由跳转（传递参数）
-        //3：失败，给用户进行提示
+        console.log(result);
+        //路由跳转
+
+        }catch (error) {
+          //3：失败，给用户进行提示
+          alert(error.message);
+        }
       }
     }
   }
