@@ -376,11 +376,10 @@
       async addShopCart(){
         //1:发请求--讲产品加入到数据库（通知服务器）
         try {
-          let result = await this.$store.dispatch('AddOrUpdateShopCart',{skuId: null, skuNum: this.skuNum})
+          let result = await this.$store.dispatch('AddOrUpdateShopCart',{skuId: this.$route.params.skuId, skuNum: this.skuNum})
         //2:服务器存储成功-----进行路由跳转（传递参数）
-        console.log(result);
         //路由跳转
-
+        this.$router.push({ name: 'addcartsuccess' });
         }catch (error) {
           //3：失败，给用户进行提示
           alert(error.message);

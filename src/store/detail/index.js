@@ -22,6 +22,7 @@ const actions = {
         let result = await reqAddOrUpdateShopCart(skuId, skuNum);
         //服务器写入数据成功，并没有返回其他的数据，只是返回{code: 200, message: '成功', data: null, ok: true}代表这次操作成功
         //因为服务器没有返回其余数据，因此不需要写三连环存储数据
+        //注意：async函数执行返回的结果一定是一个promise【要么成功，要么失败】
         /* if(result.code === 200) {
             commit('ADDORUPDATESHOPCART', result.data);
         } */

@@ -4,11 +4,18 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Search from '@/pages/Search';
 import Detail from '@/pages/Detail';
+import AddCartSuccess from '@/pages/AddCartSuccess';
 export default  [
+    {
+        path: "/addcartsuccess",
+        name: 'addcartsuccess',
+        component: AddCartSuccess,
+        meta: {show: true}
+    },
     {
         path: "/detail/:skuId",
         component: Detail,
-        //路由元信息key不能瞎写：只能叫做meta
+        //路由元信息key不能瞎写：只能叫做meta;此处作用：是否显示下面的Footer组件
         meta: {show: true}
     },
     {
