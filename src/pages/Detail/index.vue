@@ -378,8 +378,12 @@
         try {
           let result = await this.$store.dispatch('AddOrUpdateShopCart',{skuId: this.$route.params.skuId, skuNum: this.skuNum})
         //2:服务器存储成功-----进行路由跳转（传递参数）
-        //路由跳转
-        this.$router.push({ name: 'addcartsuccess' });
+        //路由跳转，传参
+        //一些简单的数据skuNum，通过query形式路由传参
+        //比较复杂的数据如对象skuInfo，通过会话存储（非持久化，会话结束数据就消失）
+        //本地存储|会话存储，一般存储的是字符串，不能直接存储对象
+        sessionStorage.setItem('SKUINFO', JSON.stringify(this.skuInfo))
+        this.$router.push({ name: 'addcartsuccess', query : {skuNum : this.skuNum} });
         }catch (error) {
           //3：失败，给用户进行提示
           alert(error.message);
