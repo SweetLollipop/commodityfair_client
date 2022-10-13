@@ -29,10 +29,13 @@ export const reqFloorList = () => mockRequests.get('/floor');
     "props": ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
     "trademark": "4:小米"
   } */
-export const reqGetSearchInfo = (params) => requests({ url: '/list', method: 'post', data: params }) 
+export const reqGetSearchInfo = (params) => requests({ url: '/list', method: 'post', data: params })
 
 //获取产品详情信息的接口
 export const reqGetGoodsInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' });
 
 //将产品添加到购物车中（获取跟新某一个产品的个数）/api/cart/addToCart/{ skuId }/{ skuNum }
-export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({ url:`/cart/addToCart/${skuId}/${skuNum}`, method: 'post'});
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post' });
+
+//获取购物车列表数据接口
+export const reqCartList = () => requests({ url:'/cart/cartList', method:'get'});

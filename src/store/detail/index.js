@@ -1,7 +1,10 @@
 import { reqGetGoodsInfo } from "@/api";
 import { reqAddOrUpdateShopCart } from "@/api";
+import { getUUID } from "@/utils/uuid_token.js";
 const state = {
     goodsInfo: {},
+    //游客身份
+    uuid_token: getUUID(),
 };
 const mutations = {
     GETGOODSINFO(state, goodsInfo) {

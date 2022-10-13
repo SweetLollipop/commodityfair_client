@@ -4,6 +4,8 @@ import axios from "axios";
 import nprogress from "nprogress";//其中的方法start：进度条开始 done：进度条结束
 //引入进度条样式
 import "nprogress/nprogress.css";
+//引入仓库store
+import store from "@/store";
 
 //1、利用axios对象的方法create,去创建一个axios实例
 //2、request就是axios，只不过稍微配置一下
@@ -20,6 +22,11 @@ requests.interceptors.request.use((config)=>{
     //config：配置对象，对象里面有一个属性很重要，headers请求头
     //进度条开始动
     nprogress.start();
+    //如果uuid_token存在
+    if(store.state.detail.uuid_token){
+        //请求头添加一个字段(userTempId)，和后台老师商量好了
+        config.headers.userTempId = store.state.detail.uuid_token;
+    }
     return config;
 });
 
