@@ -23,9 +23,9 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" :value="cart.skuNum" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a href="javascript:void(0)" class="mins" @click="handler('mins',-1,cart)">-</a>
+            <input autocomplete="off" type="text" :value="cart.skuNum" minnum="1" class="itxt" @change="handler('change',$event.target.value-cart.skuNum,cart)">
+            <a href="javascript:void(0)" class="plus" @click="handler('add',+1,cart)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuPrice * cart.skuNum }}</span>
@@ -74,6 +74,14 @@
       //获取个人购物车数据
       getData() {
         this.$store.dispatch('getCartList');
+      },
+      //修改某个产品的个数
+      handler(type, disNum, cart) {
+        //type:为了区分这三个元素
+        //disNum形参：+ 变化量
+        //cart:那个产品（身上有ID）
+        //向服务器发请求，修改数量
+        console.log(type, disNum, cart);
       }
     },
     computed: {
