@@ -24,7 +24,7 @@
           </li>
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins" @click="handler('mins',-1,cart)">-</a>
-            <input autocomplete="off" type="text" :value="cart.skuNum" minnum="1" class="itxt" @change="handler('change',$event.target.value-cart.skuNum,cart)">
+            <input autocomplete="off" type="text" :value="cart.skuNum" minnum="1" class="itxt" @change="handler('change',$event.target.value-cart.skuNum,cart)" oninput="value=value.replace(/[^0-9]/g,'')">
             <a href="javascript:void(0)" class="plus" @click="handler('add',+1,cart)">+</a>
           </li>
           <li class="cart-list-con6">
@@ -76,12 +76,30 @@
         this.$store.dispatch('getCartList');
       },
       //修改某个产品的个数
-      handler(type, disNum, cart) {
+      async handler(type, disNum, cart) {
         //type:为了区分这三个元素
         //disNum形参：+ 变化量
         //cart:那个产品（身上有ID）
         //向服务器发请求，修改数量
-        console.log(type, disNum, cart);
+        switch(type) {
+          case "add":
+            disNum = 1;
+            break;
+          case "minus":
+            disNum = cart.skuNum > 1 ? -1 : 0;
+            break;
+          case "change":
+            disNum = disNum;
+        }
+        console.log(disNum);
+        //派发action
+        try {
+        await this.$store.dispatch('AddOrUpdateShopCart', {skuId:cart.skuId, skuNum:disNum})
+        //再次刷新获取数据
+        this.getData();
+        } catch (error) {
+          
+        }
       }
     },
     computed: {
