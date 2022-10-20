@@ -31,7 +31,7 @@
             <span class="sum">{{ cart.skuPrice * cart.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" @click="deleteCartById(cart)">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -91,12 +91,22 @@
           case "change":
             disNum = disNum;
         }
-        console.log(disNum);
+        // console.log(disNum);
         //派发action
         try {
         await this.$store.dispatch('AddOrUpdateShopCart', {skuId:cart.skuId, skuNum:disNum})
         //再次刷新获取数据
         this.getData();
+        } catch (error) {
+          
+        }
+      },
+      //删除某个产品
+      async deleteCartById(cart) {
+        try {
+          //删除成功
+          await this.$store.dispatch('deleteCartById', cart.skuId);
+          this.getData();
         } catch (error) {
           
         }
