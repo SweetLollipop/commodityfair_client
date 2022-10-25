@@ -13,7 +13,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(cart,index) in cartInfoList" :key="index">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" :checked="cart.isChecked==1">
+            <input type="checkbox" name="chk_list" :checked="cart.isChecked==1" @change="updateChecked(cart,$event)">
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl">
@@ -65,6 +65,10 @@
 
 <script>
  import { mapGetters } from 'vuex';
+ //引入方式：是把lodash全部功能函数引入
+ // import _ from 'lodash';
+ //按需引入：把lodash中的throttle引入；因为throttle.js中是默认暴露，所以不加{}
+ import throttle from "lodash/throttle";
   export default {
     name: 'ShopCart',
     mounted() {
@@ -75,8 +79,8 @@
       getData() {
         this.$store.dispatch('getCartList');
       },
-      //修改某个产品的个数
-      async handler(type, disNum, cart) {
+      //修改某个产品的个数(节流)
+      handler: throttle(async function(type, disNum, cart) {
         //type:为了区分这三个元素
         //disNum形参：+ 变化量
         //cart:那个产品（身上有ID）
@@ -100,7 +104,7 @@
         } catch (error) {
           
         }
-      },
+      },500),
       //删除某个产品
       async deleteCartById(cart) {
         try {
@@ -109,6 +113,22 @@
           this.getData();
         } catch (error) {
           
+        }
+      },
+      //修改某个产品的状态
+      updateChecked(cart,event) {
+        //带给服务器的参数isChecked，不是布尔值，应该是0,1
+        try {
+          let isChecked = event.target.checked ? "1" : "0";
+          this.$store.dispatch('updateCheckedById', {skuId: cart.skuId, isChecked});
+          //如果修改成功，需再次获取服务器数据（购物车）
+          //延迟函数，$nextTick()方法此处无效
+          setTimeout(() => {
+            this.getData();
+          }, 50);
+        } catch (error) {
+          //如果失败提示
+          alert(error.message);
         }
       }
     },
