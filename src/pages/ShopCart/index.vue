@@ -44,7 +44,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteAllCheckedCart">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -126,6 +126,21 @@
           setTimeout(() => {
             this.getData();
           }, 50);
+        } catch (error) {
+          //如果失败提示
+          alert(error.message);
+        }
+      },
+      //删除全部选中的产品
+      //这个回调函数咱们没有办法收集到一些有用的数据
+      async deleteAllCheckedCart() {
+        try {
+          //派发一个action
+          this.$store.dispatch("deleteAllCheckedCart");
+          //延迟函数，$nextTick()方法此处无效
+          setTimeout(() => {
+            this.getData();
+          }, 100);
         } catch (error) {
           //如果失败提示
           alert(error.message);

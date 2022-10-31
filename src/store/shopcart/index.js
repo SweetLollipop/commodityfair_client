@@ -35,6 +35,19 @@ const actions = {
             return Promise.reject(new Error("faile"));
         }
     },
+    //删除全部选中的产品
+    deleteAllCheckedCart( {dispatch,getters} ) {
+        //context:小仓库，commit[提交mutations修改state],getters[计算属性],dispatch[派发action],state[当前仓库数据]
+        //获取购物车中全部的产品（是一个数组）
+        let PromiseAll = [];
+        getters.cartList.cartInfoList.forEach(element => {
+            let promise = element.isChecked==1 ? dispatch('deleteCartById', element.skuId) : "";
+            //将每一次返回的Promise添加到数组当中
+            PromiseAll.push(promise);
+        });
+        //只要全部的p1|p2...都成功，返回结果成功；如果有一个失败，返回即为失败。
+        return Promise.all(PromiseAll);
+    }
 };
 const getters = {
     cartList(state) {
