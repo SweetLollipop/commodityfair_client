@@ -47,6 +47,17 @@ const actions = {
         });
         //只要全部的p1|p2...都成功，返回结果成功；如果有一个失败，返回即为失败。
         return Promise.all(PromiseAll);
+    },
+    //修改全部产品的状态
+    updateAllCartIsChecked({ dispatch, state }, isChecked) {
+        //数组
+        let promiseAll = [];
+        state.cartList[0].cartInfoList.forEach(item => {
+            let promise = dispatch('updateCheckedById', { skuId: item.skuId, isChecked });
+            promiseAll.push(promise);
+        });
+        //最终返回的结果
+        return Promise.all(promiseAll);
     }
 };
 const getters = {
