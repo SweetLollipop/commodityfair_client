@@ -14,26 +14,26 @@
       <div class="content">
         <label>验证码:</label>
         <input type="text" placeholder="请输入验证码" v-model="code">
-        <button style="width: 100px; height: 38px">获取验证码</button>
+        <button style="width: 100px; height: 38px" @click="getPhoneCode(phone)">获取验证码</button>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
+        <input type="password" placeholder="请输入你的登录密码" v-model="password">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
+        <input type="password" placeholder="请输入确认密码" v-model="passwd">
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+        <input name="m1" type="checkbox" :checked="agree">
         <span>同意协议并注册《尚品汇用户协议》</span>
         <span class="error-msg">错误提示信息</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="userRegister">完成注册</button>
       </div>
     </div>
 
@@ -61,9 +61,38 @@
     name: 'Register',
     data() {
       return {
-        //收集表单数据-手机号,验证码
+        //收集表单数据-手机号,验证码,密码，确认密码
         phone: '',
         code: '',
+        password: '',
+        passwd: '',
+        agree: true,
+      }
+    },
+    methods: {
+      //获取手机验证码
+      async getPhoneCode(phone) {
+        try {
+          await this.$store.dispatch('getCode', phone);
+          //将组件的code属性值变为仓库中的验证码
+          this.code = this.$store.state.user.code;
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+      //用户的注册
+      async userRegister() {
+        try {
+          const { phone, code, password, passwd } = this;
+          if(phone && code && password==passwd) {
+            await this.$store.dispatch('userRegister', {phone, code, password});
+          }
+          setTimeout(() => {
+            this.$router.push('/login');
+          },50)
+        } catch (error) {
+          alert(error.message);
+        }
       }
     }
   }
