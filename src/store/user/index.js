@@ -2,10 +2,11 @@ import { reqGetCode } from "@/api";
 import { reqUserRegister } from "@/api";
 import { reqUserLogin } from "@/api";
 import { reqUserInfo } from "@/api";
+import { setToken, getToken } from "@/utils/token";
 //登录与注册的模块
 const state = {
     code: '',
-    token: '',
+    token: '' || getToken(),
     userInfo: {},
 };
 const mutations = {
@@ -46,7 +47,10 @@ const actions = {
         //服务器下发token,用户唯一标识符（uuid）
         //将来经常通过带token找服务器要用户信息进行展示
         if(result.code == 200) {
+            //用户已经登录成功且获取到token
             commit("USERLOGIN", result.data.token);
+            //持久化存储token
+            setToken(result.data.token);
             return 'ok';
         }else{
             return Promise.reject(new Error('faile'));
