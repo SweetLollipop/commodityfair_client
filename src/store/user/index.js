@@ -2,7 +2,8 @@ import { reqGetCode } from "@/api";
 import { reqUserRegister } from "@/api";
 import { reqUserLogin } from "@/api";
 import { reqUserInfo } from "@/api";
-import { setToken, getToken } from "@/utils/token";
+import { setToken, getToken, removeToken } from "@/utils/token";
+import { reqLogout } from "@/api";
 //登录与注册的模块
 const state = {
     code: '',
@@ -19,6 +20,13 @@ const mutations = {
     GETUSERINFO(state, userInfo) {
         state.userInfo = userInfo;
     },
+    //清除本地数据
+    CLEAR(state) {
+        //把仓库中无关用户信息清空
+        state.token = '';
+        state.userInfo = {};
+        removeToken();
+    }
 };
 const actions = {
     //获取验证码
@@ -62,6 +70,18 @@ const actions = {
         if(result.code == 200) {
             //提交用户信息
             commit("GETUSERINFO", result.data);
+            return 'ok';
+        }else{
+            return Promise.reject(new Error('faile'));
+        }
+    },
+    //退出登录
+    async userLogout({commit}){
+        //只是向服务器发起一次请求，通知清除token
+        let result = await reqLogout();
+        if(result.code == 200){
+            //action里面不能操作state，提交mutation修改state
+            commit("CLEAR");
             return 'ok';
         }else{
             return Promise.reject(new Error('faile'));
