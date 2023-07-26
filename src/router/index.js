@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
+import store from '@/store';
 //使用插件
 Vue.use(VueRouter);
 
@@ -29,7 +30,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
     }
 }
 //配置路由
-export default new VueRouter({
+let router = new VueRouter({
     //配置路由,k:v一致省略v
     routes,
     //滚动行为
@@ -37,4 +38,13 @@ export default new VueRouter({
         // 始终滚动到顶部
         return { y: 0 }
     },
-})
+});
+//全局守卫：前置守卫（在路由跳转之前进行判断）
+router.beforeEach((to,from,next)=>{
+    //to:可以获取到你想要跳转到哪个路由信息
+    //from:可以获取到你从哪个路由而来的信息
+    //next:放行函数 next()放行所有， next(path)放行指定路径, next(false)返回到原来的地址。
+    next();
+    console.log(store);
+});
+export default router;
