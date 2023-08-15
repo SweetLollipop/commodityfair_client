@@ -40,11 +40,40 @@ let router = new VueRouter({
     },
 });
 //全局守卫：前置守卫（在路由跳转之前进行判断）
-router.beforeEach((to,from,next)=>{
+router.beforeEach(async(to,from,next)=>{
     //to:可以获取到你想要跳转到哪个路由信息
     //from:可以获取到你从哪个路由而来的信息
     //next:放行函数 next()放行所有， next(path)放行指定路径, next(false)返回到原来的地址。
-    next();
-    console.log(store);
+    // next();
+    //用户登录了，才会有token,未登录一定不会有token
+    let token = store.state.user.token;
+    let name = store.state.user.userInfo.name;
+    //用户已经登录了
+    if(token) {
+        //用户已经登录了还想去login[不能去，停留在首页]
+        if(to.path=='/login'){
+            next('/');//重定向还是回到/home
+        }else{
+            //用户登录了，去（除了login）任意路由
+           if(name){//已有用户信息
+            next();
+           }else{
+             //没有用户信息，先获取用户信息再放行
+             try {
+                await store.dispatch('getUserInfo');
+                next();
+             } catch (error) {
+                //token失效了，获取不到用户信息，重新登录
+                //清除token
+                await store.dispatch('userLogout');
+                next('/login');
+             }
+           }
+        }
+    }else{
+        //用户未登录，暂时没有处理完毕，现这个样子后期再处理
+        next();
+    }
+    
 });
 export default router;
