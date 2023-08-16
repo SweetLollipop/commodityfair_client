@@ -51,7 +51,7 @@ router.beforeEach(async(to,from,next)=>{
     //用户已经登录了
     if(token) {
         //用户已经登录了还想去login[不能去，停留在首页]
-        if(to.path=='/login'){
+        if(to.path=='/login' || to.path=='/register'){
             next('/');//重定向还是回到/home
         }else{
             //用户登录了，去（除了login）任意路由
