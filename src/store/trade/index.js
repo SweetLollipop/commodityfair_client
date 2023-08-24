@@ -24,7 +24,6 @@ const actions = {
         let result = await reqOrderInfo();
         if(result.code==200){
             commit('GETORDERINFO', result.data);
-            console.log(result);
         }
     }
 };
