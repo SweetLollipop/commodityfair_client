@@ -1,6 +1,6 @@
 import {reqAddressInfo, reqOrderInfo} from '@/api';
 const state = {
-    adress: [],
+    address: [],
     orderInfo: {}
 };
 const mutations = {
