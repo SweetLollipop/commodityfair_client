@@ -123,6 +123,27 @@ import QRcode from 'qrcode'
           cancelButtonText: "支付遇见问题",//取消按钮的文本
           confirmButtonText: "已支付成功",//确定按钮的文本
           showClose: false,//是否使用右上角关闭按钮
+          beforeClose: (type,instance,done)=>{
+            //type:区分取消|确定按钮
+            //instance:当前组件实例
+            //done:关闭弹出框的方法
+            if(type=='cancel'){
+              alert('请联系管理员豪哥');
+              //清除定时器
+              clearInterval(this.timer);
+              this.timer = null;
+              //关闭弹出框
+              done();
+            }else{
+              //判断是否真的支付了
+              if(this.code==200){
+                clearInterval(this.timer);
+                this.timer = null;
+                done();
+                this.$router.push('/paysuccess');
+              }
+            }
+          }
         });
         //你需要知道支付成功|失败
         //支付成功，路由的跳转，如果支付失败，提示信息
