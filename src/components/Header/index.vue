@@ -19,8 +19,8 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
-          <a @click="$router.push('/shopcart')">我的购物车</a>
+          <a @click="$router.push('/center/myorder')" style="cursor:pointer">我的订单</a>
+          <a @click="$router.push('/shopcart')" style="cursor:pointer">我的购物车</a>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
