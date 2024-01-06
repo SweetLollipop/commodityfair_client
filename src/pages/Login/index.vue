@@ -82,7 +82,9 @@
             await this.$store.dispatch('userLogin',{phone, password})
           };
           setTimeout(() => {
-            this.$router.push('/home');
+            //登录的路由组件，看路由中是否包含query参数：若有，跳转到query参数指定路由，没有：跳转到home
+            let toPath = this.$route.query.redirect || "/home";
+            this.$router.push(toPath);
           },50);
         } catch (error) {
           alert(error.message);
