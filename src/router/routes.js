@@ -1,5 +1,5 @@
 //引入路由组件
-import Home from '@/pages/Home';
+// import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Search from '@/pages/Search';
@@ -10,8 +10,18 @@ import Trade from '@/pages/Trade';
 import Pay from '@/pages/Pay';
 import PaySuccess from '@/pages/PaySuccess';
 import Center from '@/pages/Center';
-import MyOrder from '@/pages/Center/myOrder'
-import GroupOrder from '@/pages/Center/groupOrder'
+import MyOrder from '@/pages/Center/myOrder';
+import GroupOrder from '@/pages/Center/groupOrder';
+
+/*当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。
+如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了。*/
+/*
+const foo = () => {
+    return import("@/pages/Home");
+} //可简写到路由配置信息中
+*/
+
+// 路由配置信息
 export default  [
     {
         path: "/center",
@@ -87,7 +97,7 @@ export default  [
     },
     {
         path: "/home",
-        component: Home,
+        component:  () => import("@/pages/Home"),
         meta: {show: true}
     },
     {
